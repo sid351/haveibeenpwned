@@ -48,8 +48,6 @@ function Get-PwnedPassword
             Twitter: @code_56
             GitHub:  https://github.com/sid351/
 
-            
-
             .LINK
             https://github.com/originaluko/haveibeenpwned
 
@@ -125,10 +123,10 @@ function Get-PwnedPassword
             $suffix = $SHA1.SubString(5,35) + ":"
             $found = $request.split() | select-string "$suffix" | out-string
             if ($found) {
-                $cnt = (($found.split(':'))[1]).trim()
+                $count = (($found.split(':'))[1]).trim()
                 $outputObject.HasBeenPwned = $true
-                $outputObject.PwnedCount = $cnt
-                Write-Warning  "Password pwned $cnt times!"               
+                $outputObject.PwnedCount = $count
+                Write-Warning  "Password pwned $count times!"               
             } else {
                 Write-Verbose  'Password not found.'
             }
