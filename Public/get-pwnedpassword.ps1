@@ -67,8 +67,10 @@ function Get-PwnedPassword
 
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         $baseuri = "https://api.pwnedpasswords.com/range/"
-        function Hash($textToHash)
+        function ConvertTo-SHA1Hash
         {      
+            Param($textToHash)
+
             $hasher = new-object -TypeName "System.Security.Cryptography.SHA1CryptoServiceProvider"
             $toHash = [System.Text.Encoding]::UTF8.GetBytes($textToHash)
             $bytes = $hasher.ComputeHash($toHash)
@@ -82,13 +84,13 @@ function Get-PwnedPassword
 
         Switch ($PSCmdlet.ParameterSetName) {
             'Password' {
-                $SHA1 = Hash($Password)
+                $SHA1 = ConvertTo-SHA1Hash -textToHash $Password
                 $rawInput = $Password
                 break
             }
             'SecureString' {
                 $Password = (New-Object PSCredential "user", $SecureString).GetNetworkCredential().Password
-                $SHA1 = Hash($Password)
+                $SHA1 = ConvertTo-SHA1Hash -textToHash $Password
                 $rawInput = $SecureString
                 break
             }
