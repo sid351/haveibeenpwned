@@ -24,6 +24,12 @@ function Get-PwnedPasteAccount
             Twitter: @originaluko
             GitHub:  https://github.com/originaluko/
 
+            Updated 2018-12-20
+            Author:  Owen Conti
+            Website: http://www.code56.co.uk
+            Twitter: @code_56
+            GitHub:  https://github.com/sid351/
+
             .LINK
             https://github.com/originaluko/haveibeenpwned
 
@@ -58,10 +64,12 @@ function Get-PwnedPasteAccount
                     Write-Error -Message 'Forbidden - no user agent has been specified in the request.'
                 }
                 'The remote server returned an error: (404) Not Found.' {
-                     $Response = New-Object PSObject -Property @{
-                        'Account Exists' = 'False'
-                        'Status' = 'Good'
-                        'Description' = 'Email address not found.'
+                     $Response = [pscustomobject]@{
+                        Id = "Not pwned"
+                        Source = "Not pwned"
+                        Title = "Not pwned"
+                        Date = ""
+                        EmailCount = 0
                     }
                 }
                 'The remote server returned an error: (429) Too Many Requests.' {
