@@ -41,6 +41,14 @@ function Get-PwnedPassword
             Website: http://blog.ukotic.net
             Twitter: @originaluko
             GitHub:  https://github.com/originaluko/
+            
+            Updated 2018-12-20
+            Author:  Owen Conti
+            Website: http://www.code56.co.uk
+            Twitter: @code_56
+            GitHub:  https://github.com/sid351/
+
+            
 
             .LINK
             https://github.com/originaluko/haveibeenpwned
