@@ -83,30 +83,47 @@ function Get-PwnedPassword
         Switch ($PSCmdlet.ParameterSetName) {
             'Password' {
                 $SHA1 = Hash($Password)
-                write-host $SHA1                
+                $rawInput = $Password
                 break
             }
             'SecureString' {
                 $Password = (New-Object PSCredential "user", $SecureString).GetNetworkCredential().Password
                 $SHA1 = Hash($Password)
+                $rawInput = $SecureString
                 break
             }
             'SHA1' {
+                $rawInput = $SHA1
                 break
             }
         }
+
+        Write-Verbose -Message "$rawInput has been converted to SHA1: $SHA1"
+
         $URI = $baseuri + $SHA1.SubString(0,5)
         try
         {
+            $outputObject = [pscustomobject]@{
+                RawInput = $rawInput
+                InputType = $PSCmdlet.ParameterSetName
+                SHA1 = $SHA1
+                HasBeenPwned = $false
+                PwnedCount = 0
+                }
+
             $Request = Invoke-RestMethod -Uri $URI
             $suffix = $SHA1.SubString(5,35) + ":"
             $found = $request.split() | select-string "$suffix" | out-string
             if ($found) {
                 $cnt = (($found.split(':'))[1]).trim()
-                Write-Warning  "Password pwned $cnt times!"
+                $outputObject.HasBeenPwned = $true
+                $outputObject.PwnedCount = $cnt
+                Write-Warning  "Password pwned $cnt times!"               
             } else {
-                Write-Output  'Password not found.'
+                Write-Verbose  'Password not found.'
             }
+
+            Write-Output $outputObject
         }
          catch [System.Net.WebException] {
             Switch ($_.Exception.Message) {
