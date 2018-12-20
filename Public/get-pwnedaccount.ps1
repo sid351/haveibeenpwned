@@ -58,11 +58,23 @@ Function Get-PwnedAccount
                     Write-Error -Message 'Forbidden - no user agent has been specified in the request.'
                 }
                 'The remote server returned an error: (404) Not Found.' {
-                    $Response = New-Object PSObject -Property @{
-                        'Account Exists' = 'False'
-                        'Status' = 'Good'
-                        'Description' = 'Email address not found.'
-                    }
+                    $Response = [PSCustomObject]@{
+                            Name = "Not Pwned"
+                            Title = "Not Pwned"
+                            Domain = "None"
+                            BreachDate = ""
+                            AddedDate = ""
+                            ModifiedDate = ""
+                            PwnCount = 0
+                            Description = "Email address not found."
+                            LogoPath = ""
+                            DataClasses = ""
+                            IsVerified = $false                        
+                            IsFabricated = $false
+                            IsSensitive = $false
+                            IsRetired = $false
+                            IsSpamList = $false
+                        }
                 }
                 'The remote server returned an error: (429) Too Many Requests.' {
                     Write-Error -Message 'Too many requests - the rate limit has been exceeded.'
